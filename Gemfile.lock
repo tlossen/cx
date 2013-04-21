@@ -5,6 +5,7 @@ GEM
     minitest (4.7.3)
     mocha (0.13.3)
       metaclass (~> 0.0.1)
+    msgpack (0.5.4)
     mysql2 (0.3.11)
     redis (3.0.3)
 
@@ -14,5 +15,6 @@ PLATFORMS
 DEPENDENCIES
   minitest
   mocha
+  msgpack
   mysql2
   redis
