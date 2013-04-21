@@ -1,3 +1,4 @@
+# coding: utf-8
 class Action
 
   def self.params(*params)

@@ -1,4 +1,5 @@
-# require 'redis'
+# coding: utf-8
+require 'redis'
 require 'mysql2'
 
 $db = Mysql2::Client.new(
