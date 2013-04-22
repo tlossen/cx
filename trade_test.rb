@@ -36,16 +36,27 @@ MATCH = <<-LUA
   end
 LUA
 
+DELETE_ORDER = <<-LUA
+  local order_id = ARGV[1]
+  local order = redis.call('hget', 'orders', order_id)
+  redis.call('zrem', 'bids', order_id)
+  redis.call('zrem', 'asks', order_id)
+  redis.call('hdel', 'orders', order_id)
+  return order
+LUA
+
 def create_bid(eur_limit, btc)
   order_id = rand(1_000_000)
   $redis.hset "orders", order_id, MessagePack.pack(:eur_limit => eur_limit, :btc_open => btc)
   $redis.zadd "bids", "-#{eur_limit}.#{9_999_999_999 - Time.now.to_i}", order_id
+  order_id
 end
 
 def create_ask(eur_limit, btc)
   order_id = rand(1_000_000)
   $redis.hset "orders", order_id, MessagePack.pack(:eur_limit => eur_limit, :btc_open => btc)
   $redis.zadd "asks", "#{eur_limit}.#{Time.now.to_i}", order_id
+  order_id
 end
 
 def show_state
@@ -65,11 +76,14 @@ end
 $redis = Redis.new
 $redis.flushdb
 
-create_bid(9700, 500)
+bid1 = create_bid(9700, 500)
 create_bid(9770, 500)
 create_ask(9970, 1000)
 create_ask(9750, 300)
 show_state
 
 puts "[trade] #{MessagePack.unpack($redis.eval(MATCH))}"
+show_state
+
+puts "[delete] #{MessagePack.unpack($redis.eval(DELETE_ORDER, [], [bid1]))}"
 show_state

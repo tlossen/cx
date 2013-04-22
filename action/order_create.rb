@@ -13,7 +13,7 @@ class OrderCreate < Action
 
   def create_bid
     $db.transaction do
-      updated= $db.update("accounts",
+      updated = $db.update("accounts",
         "set eur_used = eur_used + #{eur_total}
         where account_id = #{account_id}
         and eur_used + #{eur_total} <= eur"
