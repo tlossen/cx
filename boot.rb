@@ -6,11 +6,11 @@ require "mysql2"
 
 Root = File.expand_path("..", __FILE__)
 # $:.unshift("#{Root}/lib")
-%w[action].each do |dir|
+%w[lib action].each do |dir|
   Dir.glob("#{dir}/**/*.rb").sort.each { |file| require_relative file }
 end
 
-$db = Mysql2::Client.new(
+$db = Database.new(
   :host => "localhost",
   :username => "root",
   :database => "test"
