@@ -12,9 +12,21 @@ MATCH = <<-LUA
 
   if bid.eur_limit >= ask.eur_limit then
 
-    local trade = { ask_id = ask_id, bid_id = bid_id }
-    trade.rate = (bid.eur_limit + ask.eur_limit) / 2
-    trade.btc = math.min(bid.btc_open, ask.btc_open)
+    local trade = {
+      bid_id = bid_id,
+      ask_id = ask_id,
+      btc = math.min(bid.btc_open, ask.btc_open)
+    }
+
+    local last_rate = tonumber(redis.call('get', 'rate')) or 0
+    if last_rate >= bid.eur_limit then
+      trade.eur_rate = bid.eur_limit
+    elseif last_rate <= ask.eur_limit then
+      trade.eur_rate = ask.eur_limit
+    else
+      trade.eur_rate = last_rate
+    end
+    redis.call('set', 'rate', trade.eur_rate)
 
     bid.btc_open = bid.btc_open - trade.btc
     if bid.btc_open == 0 then

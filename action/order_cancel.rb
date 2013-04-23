@@ -15,14 +15,12 @@ class OrderCancel < Action
   LUA
 
   def execute
-    order = $redis.eval(DELETE_ORDER, [], [order_id])
+    order = unpack($redis.eval(DELETE_ORDER, [], [order_id]))
     if order
-      btc_open = MessagePack.unpack(order)['btc_open']
+      btc_open = order["btc_open"]
       $db.transaction do
         $db.update(:orders, "set active = false where order_id = #{order_id}")
-        $db.update(:accounts, "set btc_used = btc_used - #{btc_open}
-          where account_id = #{account_id}"
-        )
+        $db.update(:accounts, "set btc_used = btc_used - #{btc_open} where account_id = #{account_id}")
       end
     end
   end

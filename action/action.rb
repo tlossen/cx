@@ -16,6 +16,10 @@ class Action
 
 protected
 
+  def unpack(data)
+    data && MessagePack.unpack(data)
+  end
+
   def multiply(a, b)
     (a * b / 100.0).round
   end
