@@ -13,13 +13,14 @@ class OrderCreate < Action
 
   def create_bid
     $db.transaction do
-      updated = $db.update("accounts",
+      updated = $db.update(:accounts,
         "set eur_used = eur_used + #{eur_total}
         where account_id = #{account_id}
         and eur_used + #{eur_total} <= eur"
       )
       raise("insufficient EUR balance available") unless updated == 1
-      order_id = $db.insert("orders",
+      order_id = $db.insert(:orders,
+        account_id: account_id,
         type: "bid",
         eur_limit: eur_limit,
         btc: btc,
@@ -32,21 +33,22 @@ class OrderCreate < Action
 
   def create_ask
     transaction do
-      updated = $db.update("accounts",
+      updated = $db.update(:accounts,
         "set btc_used = btc_used + #{btc}
         where account_id = #{account_id}
         and btc_used + #{btc} <= btc"
       )
       raise("insufficient BTC balance available") unless updated == 1
-      order_id = $db.insert("orders",
+      order_id = $db.insert(:orders,
+        account_id: account_id,
         type: "ask",
         eur_limit: eur_limit,
         btc: btc,
         btc_open: btc
       )
     end
-    $redis.hset "orders", order_id, MessagePack.pack(:eur_limit => eur_limit, :btc_open => btc)
-    $redis.zadd "asks", "#{eur_limit}.#{Time.now.to_i}", order_id
+    $redis.hset("orders", order_id, MessagePack.pack(:eur_limit => eur_limit, :btc_open => btc))
+    $redis.zadd("asks", "#{eur_limit}.#{Time.now.to_i}", order_id)
   end
 
 private
