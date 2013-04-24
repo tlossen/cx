@@ -14,6 +14,7 @@ class TradeCreate < Action
           eur_rate: trade["eur_rate"],
           btc:      trade["btc"]
         )
+        # move this into the worker?
         $redis.lpush("trades", trade_id)
       end
     end

@@ -11,6 +11,10 @@ class Database
     @db.query "create table #{name} (#{table_def})"
   end
 
+  def query(statement)
+    @db.query(statement)
+  end
+
   def insert(table, columns)
     keys, values = columns.keys.join(","), columns.values.join(",")
     @db.query "insert into #{table} (#{keys}) values (#{values})"
