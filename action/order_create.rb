@@ -27,8 +27,9 @@ class OrderCreate < Action
         btc_open: btc
       )
     end
+    sort_order = (2**32 - order_id).to_s.rjust(10, "0")
     $redis.hset("orders", order_id, MessagePack.pack(:eur_limit => eur_limit, :btc_open => btc))
-    $redis.zadd("bids", "-#{eur_limit}.#{2**31 - Time.now.to_i}", order_id)
+    $redis.zadd("bids", "-#{eur_limit}.#{sort_order}", order_id)
   end
 
   def create_ask
@@ -47,8 +48,9 @@ class OrderCreate < Action
         btc_open: btc
       )
     end
+    sort_order = order_id.to_s.rjust(10, "0")
     $redis.hset("orders", order_id, MessagePack.pack(:eur_limit => eur_limit, :btc_open => btc))
-    $redis.zadd("asks", "#{eur_limit}.#{Time.now.to_i}", order_id)
+    $redis.zadd("asks", "#{eur_limit}.#{sort_order}", order_id)
   end
 
 private
