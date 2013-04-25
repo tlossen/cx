@@ -14,9 +14,11 @@ class OrderCreate < Action
   def create_bid
     $db.transaction do
       updated = $db.update(:accounts,
-        "set eur_used = eur_used + #{eur_total}
-        where account_id = #{account_id}
-        and eur_used + #{eur_total} <= eur"
+        "set
+          eur_used = eur_used + #{eur_total}
+        where
+          account_id = #{account_id}
+          and eur_used + #{eur_total} <= eur"
       )
       raise("insufficient EUR balance available") unless updated == 1
       order_id = $db.insert(:orders,
@@ -27,17 +29,23 @@ class OrderCreate < Action
         btc_open: btc
       )
     end
-    sort_order = (2**32 - order_id).to_s.rjust(10, "0")
-    $redis.hset("orders", order_id, MessagePack.pack(:eur_limit => eur_limit, :btc_open => btc))
-    $redis.zadd("bids", "-#{eur_limit}.#{sort_order}", order_id)
+    priority = (2**32 - order_id).to_s.rjust(10, "0")
+    $redis.hset("orders", order_id, MessagePack.pack(
+      account_id: account_id,
+      eur_limit:  eur_limit,
+      btc_open:   btc
+    ))
+    $redis.zadd("bids", "-#{eur_limit}.#{priority}", order_id)
   end
 
   def create_ask
     transaction do
       updated = $db.update(:accounts,
-        "set btc_used = btc_used + #{btc}
-        where account_id = #{account_id}
-        and btc_used + #{btc} <= btc"
+        "set
+          btc_used = btc_used + #{btc}
+        where
+          account_id = #{account_id}
+          and btc_used + #{btc} <= btc"
       )
       raise("insufficient BTC balance available") unless updated == 1
       order_id = $db.insert(:orders,
@@ -48,9 +56,13 @@ class OrderCreate < Action
         btc_open: btc
       )
     end
-    sort_order = order_id.to_s.rjust(10, "0")
-    $redis.hset("orders", order_id, MessagePack.pack(:eur_limit => eur_limit, :btc_open => btc))
-    $redis.zadd("asks", "#{eur_limit}.#{sort_order}", order_id)
+    priority = order_id.to_s.rjust(10, "0")
+    $redis.hset("orders", order_id, MessagePack.pack(
+      account_id: account_id,
+      eur_limit:  eur_limit,
+      btc_open:   btc
+    ))
+    $redis.zadd("asks", "#{eur_limit}.#{priority}", order_id)
   end
 
 private

@@ -20,18 +20,19 @@ $db.create_table(:orders,
 
 $db.create_table(:trades,
   trade_id:   "integer unsigned primary key auto_increment",
-  # bidder_id: "integer unsigned not null",
-  # asker_id: "integer unsigned not null",
+  bidder_id:  "integer unsigned not null",
+  asker_id:   "integer unsigned not null",
   bid_id:     "integer unsigned not null",
   ask_id:     "integer unsigned not null",
   eur_rate:   "integer unsigned not null default 0",
   btc:        "integer unsigned not null default 0",
+  created_at: "decimal(13,3) unsigned not null",
   booked_at:  "decimal(13,3) unsigned"
 )
 
 $db.create_table(:deltas,
   delta_id:   "integer unsigned primary key auto_increment",
-  # account_id: "integer unsigned not null",
+  account_id: "integer unsigned not null",
   trade_id:   "integer unsigned not null",
   eur:        "integer not null default 0",
   btc:        "integer not null default 0",

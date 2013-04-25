@@ -4,16 +4,23 @@ class TradeCreate < Action
   def execute
     trade = unpack($redis.eval(DATA))
     if trade
+      btc, bid_id, ask_id = trade.values_at(%w[btc bid_id ask_id])
       $db.transaction do
-        btc = trade["btc"]
-        $db.update(:orders, "set btc_open = btc_open - #{btc}, active = btc_open > 0 where order_id = #{bid_id}")
-        $db.update(:orders, "set btc_open = btc_open - #{btc}, active = btc_open > 0 where order_id = #{ask_id}")
-        trade_id = $db.insert(:trades,
-          bid_id:   trade["bid_id"],
-          ask_id:   trade["ask_id"],
-          eur_rate: trade["eur_rate"],
-          btc:      trade["btc"]
+        $db.update(:orders,
+          "set
+            btc_open = btc_open - #{btc},
+            active = btc_open > 0
+          where
+            order_id = #{bid_id}"
         )
+        $db.update(:orders,
+          "set
+            btc_open = btc_open - #{btc},
+            active = btc_open > 0
+          where
+            order_id = #{ask_id}"
+        )
+        trade_id = $db.insert(:trades, trade.merge(created_at: Time.stamp))
         # move this into the worker?
         $redis.lpush("trades", trade_id)
       end
@@ -34,6 +41,8 @@ if bid.eur_limit < ask.eur_limit then
 end
 
 local trade = {
+  bidder_id = bid.account_id,
+  asker_id = ask.account_id,
   bid_id = bid_id,
   ask_id = ask_id,
   btc = math.min(bid.btc_open, ask.btc_open)

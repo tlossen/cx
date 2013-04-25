@@ -18,11 +18,11 @@ private
     $db.update(:accounts,
       "set btc = btc + #{btc},
       eur = eur - #{eur_total}
-      where account_id = #{42}"
+      where account_id = #{bidder_id}"
     )
     $db.insert(:deltas,
       trade_id:   trade_id,
-      account_id: 42,
+      account_id: bidder_id,
       eur:        -eur_total,
       btc:        +btc,
       booked_at:  stamp
@@ -33,11 +33,11 @@ private
     $db.update(:accounts,
       "set btc = btc - #{btc},
       eur = eur + #{eur_total}
-      where account_id = #{42}"
+      where account_id = #{asker_id}"
     )
     $db.insert(:deltas,
       trade_id:   trade_id,
-      account_id: 42,
+      account_id: asker_id,
       eur:        +eur_total,
       btc:        -btc,
       booked_at:  stamp
@@ -61,6 +61,14 @@ private
 
   def btc
     trade["btc"]
+  end
+
+  def bidder_id
+    trade["bidder_id"]
+  end
+
+  def asker_id
+    trade["asker_id"]
   end
 
   def trade
