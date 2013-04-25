@@ -6,8 +6,11 @@ GEM
     mocha (0.13.3)
       metaclass (~> 0.0.1)
     msgpack (0.5.4)
+    mynyml-redgreen (0.7.1)
+      term-ansicolor (>= 1.0.4)
     mysql2 (0.3.11)
     redis (3.0.3)
+    term-ansicolor (1.1.5)
 
 PLATFORMS
   ruby
@@ -16,5 +19,6 @@ DEPENDENCIES
   minitest
   mocha
   msgpack
+  mynyml-redgreen
   mysql2
   redis

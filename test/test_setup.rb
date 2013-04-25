@@ -1,6 +1,8 @@
 require "minitest/unit"
 require "minitest/spec"
-require "mocha/setup"
+require "minitest/autorun"
+require "redgreen"
+# require "mocha/setup"
 
 require_relative "../boot.rb"
 

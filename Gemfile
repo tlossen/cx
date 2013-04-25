@@ -6,5 +6,6 @@ gem "msgpack"
 
 group :test do
   gem "minitest"
-  gem "mocha"
+  # gem "mocha"
+  gem "mynyml-redgreen"
 end
