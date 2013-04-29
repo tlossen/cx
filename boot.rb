@@ -3,6 +3,7 @@ require "rubygems"
 require "bundler/setup"
 require "redis"
 require "mysql2"
+require "msgpack"
 
 Root = File.expand_path("..", __FILE__)
 # $:.unshift("#{Root}/lib")

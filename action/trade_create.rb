@@ -7,18 +7,14 @@ class TradeCreate < Action
       btc, bid_id, ask_id = trade.values_at(%w[btc bid_id ask_id])
       $db.transaction do
         $db.update(:orders,
-          "set
-            btc_open = btc_open - #{btc},
+          "set btc_open = btc_open - #{btc},
             active = btc_open > 0
-          where
-            order_id = #{bid_id}"
+          where order_id = #{bid_id}"
         )
         $db.update(:orders,
-          "set
-            btc_open = btc_open - #{btc},
+          "set btc_open = btc_open - #{btc},
             active = btc_open > 0
-          where
-            order_id = #{ask_id}"
+          where order_id = #{ask_id}"
         )
         trade_id = $db.insert(:trades, trade.merge(created_at: Time.stamp))
         # move this into the worker?

@@ -17,7 +17,8 @@ private
   def book_bidder
     $db.update(:accounts,
       "set btc = btc + #{btc},
-      eur = eur - #{eur_total}
+        eur = eur - #{eur_total},
+        eur_used = eur_used - #{eur_total}
       where account_id = #{bidder_id}"
     )
     $db.insert(:deltas,
@@ -32,7 +33,8 @@ private
   def book_asker
     $db.update(:accounts,
       "set btc = btc - #{btc},
-      eur = eur + #{eur_total}
+        btc_used = btc_used - #{btc},
+        eur = eur + #{eur_total}
       where account_id = #{asker_id}"
     )
     $db.insert(:deltas,
@@ -72,7 +74,7 @@ private
   end
 
   def trade
-    @trade ||= $db.query("select * from trades where trade_id = #{trade_id} and booked_at is null").first
+    @trade ||= $db.exec("select * from trades where trade_id = #{trade_id} and booked_at is null").first
   end
 
   def stamp

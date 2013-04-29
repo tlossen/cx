@@ -17,3 +17,13 @@ module MiniTest
 
   end
 end
+
+
+class Database
+  def flush!
+    @db.query("delete from accounts")
+    @db.query("delete from orders")
+    @db.query("delete from trades")
+    @db.query("delete from deltas")
+  end
+end
