@@ -8,6 +8,8 @@ describe OrderCreate do
     $db.flush!
   end
 
+  # todo: test transactions
+
   describe "bid" do
     before do
       $db.insert(:accounts, account_id: 42, eur: 100000, eur_used: 300)

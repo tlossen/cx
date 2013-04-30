@@ -28,13 +28,14 @@ private
         btc:        btc,
         btc_open:   btc
       )
-      # todo: make redis commands atomic
-      $redis.hset("orders", order_id, MessagePack.pack(
-        account_id: account_id,
-        eur_limit:  eur_limit,
-        btc_open:   btc
-      ))
-      $redis.zadd("bids", "-#{eur_limit}.#{reverse_priority(order_id)}", order_id)
+      $redis.multi do
+        $redis.hset("orders", order_id, MessagePack.pack(
+          account_id: account_id,
+          eur_limit:  eur_limit,
+          btc_open:   btc
+        ))
+        $redis.zadd("bids", "-#{eur_limit}.#{reverse_priority(order_id)}", order_id)
+      end
       order_id
     end
   end
@@ -54,12 +55,14 @@ private
         btc:        btc,
         btc_open:   btc
       )
-      $redis.hset("orders", order_id, MessagePack.pack(
-        account_id: account_id,
-        eur_limit:  eur_limit,
-        btc_open:   btc
-      ))
-      $redis.zadd("asks", "#{eur_limit}.#{priority(order_id)}", order_id)
+      $redis.multi do
+        $redis.hset("orders", order_id, MessagePack.pack(
+          account_id: account_id,
+          eur_limit:  eur_limit,
+          btc_open:   btc
+        ))
+        $redis.zadd("asks", "#{eur_limit}.#{priority(order_id)}", order_id)
+      end
       order_id
     end
   end
