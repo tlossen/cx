@@ -7,6 +7,7 @@ GEM
       term-ansicolor (>= 1.0.4)
     mysql2 (0.3.11)
     redis (3.0.3)
+    sys-proctable (0.9.3)
     term-ansicolor (1.1.5)
 
 PLATFORMS
@@ -18,3 +19,4 @@ DEPENDENCIES
   mynyml-redgreen
   mysql2
   redis
+  sys-proctable
