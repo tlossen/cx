@@ -7,8 +7,11 @@ require "msgpack"
 
 Root = File.expand_path("..", __FILE__)
 
-%w[lib action worker].each do |dir|
-  Dir.glob("#{dir}/**/*.rb").sort.each { |file| require_relative file }
+%w[monkey . actions workers].each do |dir|
+  Dir.glob("lib/#{dir}/*.rb").sort.each do |file|
+    puts file
+    require_relative file
+  end
 end
 
 $db = Database.new(
