@@ -6,7 +6,9 @@ class Pool
   def run
     init
     forever do
-      if pool_size == 0 && child_count == 0
+      if shutdown_requested
+        stop_all_workers
+        sleep(0.1) while child_count > 0
         return
       elsif child_count < pool_size
         start_worker
@@ -54,8 +56,13 @@ protected
 private
 
   def init
+    $redis.set(key("master"), Process.pid)
     $redis.setnx(key("size"), 1)
     $redis.del(key("workers"))
+  end
+
+  def shutdown_requested
+    not $redis.exists(key("master"))
   end
 
   def start_worker
