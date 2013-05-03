@@ -7,7 +7,7 @@ require "msgpack"
 
 Root = File.expand_path("..", __FILE__)
 
-%w[monkey . actions workers].each do |dir|
+%w[monkey . actions pools].each do |dir|
   Dir.glob("lib/#{dir}/*.rb").sort.each do |file|
     puts file
     require_relative file

@@ -1,5 +1,5 @@
 # coding: utf-8
-class CoreEventPump < Pool
+class CorePump < Pool
 
   def worker_body
     forever do
