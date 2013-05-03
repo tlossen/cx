@@ -16,9 +16,7 @@ class TradeCreate < Action
             active = btc_open > 0
           where order_id = #{ask_id}"
         )
-        trade_id = $db.insert(:trades, trade.merge(created_at: Time.stamp))
-        # move this into the worker?
-        $redis.lpush("trades", trade_id)
+        $db.insert(:trades, trade.merge(created_at: Time.stamp))
       end
     end
   end
