@@ -1,5 +1,5 @@
 # coding: utf-8
-class CorePump < Pool
+class BrokerPump < Pool
 
   def worker_body
     forever do
