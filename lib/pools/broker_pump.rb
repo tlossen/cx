@@ -6,7 +6,7 @@ class BrokerPump < Pool
       $redis.subscribe(:firehose) do |on|
         on.message do |channel, message|
           downstream.publish(channel, message)
-          return if stop_requested
+          return if stop_requested?
         end
       end
     end
