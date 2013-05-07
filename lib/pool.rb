@@ -38,7 +38,7 @@ protected
         yield
       rescue Exception => e
         log_error(e)
-        sleep(0.1)
+        pause
       end
     end
   end
@@ -90,6 +90,10 @@ private
 
   def child_count
     Sys::ProcTable.ps.count { |p| p.ppid == Process.pid }
+  end
+
+  def pause
+    $redis.set(key("size"), 0)
   end
 
   def pool_size
