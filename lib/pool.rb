@@ -3,14 +3,15 @@ require "sys/proctable"
 
 class Pool
 
-  def run
+  def start
     init
     forever do
-      if shutdown_requested
+      if shutdown_requested?
         stop_all_workers
         sleep(0.1) while child_count > 0
         return
       elsif child_count < pool_size
+        track_current_workers
         start_worker
       elsif worker_count > pool_size
         stop_worker
@@ -24,11 +25,17 @@ protected
 
   # override this!
   def worker_body
-    i = 0
+    pid, i = Process.pid, 0
     forever do
-      return if stop_requested
-      puts "#{Process.pid}: #{i += 1}"
-      sleep(1)
+      return if i == 50 || stop_requested?
+      item = $redis.rpop("test")
+      if item
+        raise "boom" if item == "boom"
+        puts "[#{pid}] processing: #{item}"
+      else
+        puts "[#{pid}] #{i += 1}"
+        sleep(1)
+      end
     end
   end
 
@@ -37,8 +44,9 @@ protected
       begin
         yield
       rescue Exception => e
+        puts e.message
         log_error(e)
-        sleep(0.1)
+        pause
       end
     end
   end
@@ -49,7 +57,7 @@ protected
   rescue Exception => ignored
   end
 
-  def stop_requested
+  def stop_requested?
     not $redis.sismember(key("workers"), Process.pid)
   end
 
@@ -61,7 +69,7 @@ private
     $redis.del(key("workers"))
   end
 
-  def shutdown_requested
+  def shutdown_requested?
     not $redis.exists(key("master"))
   end
 
@@ -74,6 +82,7 @@ private
     $redis = Redis.new
     $redis.sadd(key("workers"), Process.pid)
     worker_body
+    $redis.srem(key("workers"), Process.pid)
   end
 
   def stop_worker
@@ -88,8 +97,25 @@ private
     $redis.scard(key("workers"))
   end
 
+  def track_current_workers
+    $redis.multi do
+      $redis.del(key("workers"))
+      children.each do |worker|
+        $redis.sadd(key("workers"), worker)
+      end
+    end
+  end
+
   def child_count
-    Sys::ProcTable.ps.count { |p| p.ppid == Process.pid }
+    children.count
+  end
+
+  def children
+    Sys::ProcTable.ps.select { |p| p.ppid == Process.pid }.map(&:pid)
+  end
+
+  def pause
+    $redis.set(key("size"), 0)
   end
 
   def pool_size

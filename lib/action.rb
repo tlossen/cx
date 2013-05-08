@@ -10,7 +10,7 @@ class Action
     end
   end
 
-  def initialize(params)
+  def initialize(params = {})
     @params = params
   end
 
