@@ -7,10 +7,9 @@ class Pool
     init
     forever do
       if shutdown_requested?
-        stop_all_workers
-        sleep(0.1) while child_count > 0
+        stop_all!
         return
-      elsif child_count < pool_size
+      elsif children.count < pool_size
         track_current_workers
         start_worker
       elsif worker_count > pool_size
@@ -24,15 +23,15 @@ class Pool
 protected
 
   # override this!
-  def worker_body
-    pid, i = Process.pid, 0
+  def worker
+    i = 0
     forever do
-      return if stop_working?
+      return if must_stop?
       item = $redis.rpop("todo")
       if item
         return if item == "exit"
         raise "boom" if item == "boom"
-        puts "[#{pid}] processing: #{item}"
+        puts "[#{pid}] #{item}"
       else
         puts "[#{pid}] #{i += 1}"
         sleep(1)
@@ -45,15 +44,15 @@ protected
       begin
         yield
       rescue Exception => e
-        puts e.message
+        puts "[#{pid}] #{e.message}"
         log_error(e)
         pause_all!
       end
     end
   end
 
-  def stop_working?
-    stop_requested? || master_gone?
+  def must_stop?
+    master_gone? || stop_requested?
   end
 
   def log_error(e)
@@ -65,7 +64,7 @@ protected
 private
 
   def init
-    $redis.set(key("master"), Process.pid)
+    $redis.set(key("master"), pid)
     $redis.setnx(key("size"), 1)
     $redis.del(key("workers"))
   end
@@ -75,27 +74,29 @@ private
   end
 
   def stop_requested?
-    not $redis.sismember(key("workers"), Process.pid)
+    not $redis.sismember(key("workers"), pid)
   end
 
   def start_worker
-    pid = fork { worker }
+    pid = fork { setup_worker }
     Process.detach(pid)
   end
 
-  def worker
+  def setup_worker
     $redis = Redis.new
-    $redis.sadd(key("workers"), Process.pid)
-    worker_body
-    $redis.srem(key("workers"), Process.pid)
+    $redis.sadd(key("workers"), pid)
+    worker
+  ensure
+    $redis.srem(key("workers"), pid)
   end
 
   def stop_worker
     $redis.spop(key("workers"))
   end
 
-  def stop_all_workers
+  def stop_all!
     $redis.del(key("workers"))
+    sleep(0.1) while children.count > 0
   end
 
   def worker_count
@@ -111,12 +112,8 @@ private
     end
   end
 
-  def child_count
-    children.count
-  end
-
   def children
-    Sys::ProcTable.ps.select { |p| p.ppid == Process.pid }.map(&:pid)
+    Sys::ProcTable.ps.select { |p| p.ppid == pid }.map(&:pid)
   end
 
   def master_gone?
@@ -141,6 +138,10 @@ private
 
   def pool_id
     self.class.name.to_underscore
+  end
+
+  def pid
+    Process.pid
   end
 
 end

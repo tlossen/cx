@@ -1,7 +1,7 @@
 # coding: utf-8
 class CoreBooker < Pool
 
-  def worker_body
+  def worker
     forever do
       return if stop_requested?
       trade_id = $redis.rpop("trades")

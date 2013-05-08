@@ -3,7 +3,7 @@ class CoreTrader < Pool
 
   TRADE_CREATE = TradeCreate.new
 
-  def worker_body
+  def worker
     forever do
       return if stop_requested?
       trade_id = TRADE_CREATE.execute

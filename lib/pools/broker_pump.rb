@@ -1,12 +1,12 @@
 # coding: utf-8
 class BrokerPump < Pool
 
-  def worker_body
+  def worker
     forever do
       $redis.subscribe(:firehose) do |on|
         on.message do |channel, message|
           downstream.publish(channel, message)
-          return if stop_requested?
+          return if must_stop?
         end
       end
     end
