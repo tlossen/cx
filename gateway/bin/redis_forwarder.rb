@@ -10,13 +10,16 @@ begin
   redis.psubscribe("*") do |on|
 
     on.pmessage do |pattern, channel, data|
-      puts "#{channel}: #{data}"
+      event_type = data =~ /"event_type":"([^"]+)"/ && $1
+      puts "Event-Type: #{event_type}\n" +
+           "#{channel}: #{data}"
       # TODO: make persistent socket (keepalive?)
       socket = UNIXSocket.new("/tmp/cx_gateway_publish.sock")
       socket.write([
         "POST /publish HTTP/1.0",
         "Content-Length: #{data.size}",
         "X-Channel: #{channel}",
+        "Event-Type: #{event_type}",
         "",
         data
       ].compact.join("\r\n"))
