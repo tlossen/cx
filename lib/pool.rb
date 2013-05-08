@@ -27,10 +27,11 @@ protected
   def worker_body
     pid, i = Process.pid, 0
     forever do
-      return if i == 50 || stop_requested?
+      return if stop_requested?
       item = $redis.rpop("test")
       if item
         raise "boom" if item == "boom"
+        return if item == "exit"
         puts "[#{pid}] processing: #{item}"
       else
         puts "[#{pid}] #{i += 1}"
