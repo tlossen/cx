@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+require "pry"
+
+load "boot.rb"
+binding.pry

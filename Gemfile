@@ -9,3 +9,6 @@ group :test do
   gem "minitest"
   gem "mynyml-redgreen"
 end
+group :development do
+  gem "pry"
+end
