@@ -27,11 +27,11 @@ protected
   def worker_body
     pid, i = Process.pid, 0
     forever do
-      return if stop_requested?
-      item = $redis.rpop("test")
+      return if stop_working?
+      item = $redis.rpop("todo")
       if item
-        raise "boom" if item == "boom"
         return if item == "exit"
+        raise "boom" if item == "boom"
         puts "[#{pid}] processing: #{item}"
       else
         puts "[#{pid}] #{i += 1}"
@@ -47,19 +47,19 @@ protected
       rescue Exception => e
         puts e.message
         log_error(e)
-        pause
+        pause_all!
       end
     end
+  end
+
+  def stop_working?
+    stop_requested? || master_gone?
   end
 
   def log_error(e)
     $redis.lpush(key("errors"), [Time.stamp, e.message].join(" "))
     $redis.ltrim(key("errors"), 20)
   rescue Exception => ignored
-  end
-
-  def stop_requested?
-    not $redis.sismember(key("workers"), Process.pid)
   end
 
 private
@@ -72,6 +72,10 @@ private
 
   def shutdown_requested?
     not $redis.exists(key("master"))
+  end
+
+  def stop_requested?
+    not $redis.sismember(key("workers"), Process.pid)
   end
 
   def start_worker
@@ -115,7 +119,15 @@ private
     Sys::ProcTable.ps.select { |p| p.ppid == Process.pid }.map(&:pid)
   end
 
-  def pause
+  def master_gone?
+    Sys::ProcTable.ps(master.to_i).nil?
+  end
+
+  def master
+    $redis.get(key("master"))
+  end
+
+  def pause_all!
     $redis.set(key("size"), 0)
   end
 
