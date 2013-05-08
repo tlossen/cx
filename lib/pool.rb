@@ -11,6 +11,7 @@ class Pool
         sleep(0.1) while child_count > 0
         return
       elsif child_count < pool_size
+        track_current_workers
         start_worker
       elsif worker_count > pool_size
         stop_worker
@@ -96,8 +97,21 @@ private
     $redis.scard(key("workers"))
   end
 
+  def track_current_workers
+    $redis.multi do
+      $redis.del(key("workers"))
+      children.each do |worker|
+        $redis.sadd(key("workers"), worker)
+      end
+    end
+  end
+
   def child_count
-    Sys::ProcTable.ps.count { |p| p.ppid == Process.pid }
+    children.count
+  end
+
+  def children
+    Sys::ProcTable.ps.select { |p| p.ppid == Process.pid }.map(&:pid)
   end
 
   def pause
