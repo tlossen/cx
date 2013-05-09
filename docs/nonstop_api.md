@@ -193,6 +193,11 @@ In case public service unavailability we will issue private Endpoints as Subdoma
 If possible our public endpoint will respond with `503 Service Unavailable` during such an event. But it may not be reachable as well.
 Using the private subdomain one can still access our full service. As a client application developer you could provide a facility to enter the private subdomain.
 
+## Broken Endpoints
+
+An endpoint may be broken, if so please choose the next one from the `DNS` round robin list.
+A broken endpoint responds with `500 Internal Server Error`.
+
 ## Limitations and Banning
 
 If you send a bunch of malformed requests to our endpoints you endanger yourself from having your ip banned temporarely.
@@ -202,8 +207,9 @@ Therefore please have an eye on the following limitations:
 * The maximum request body length is `4k`
 * The sum of the HTTP headers may not exceed `4k`
 * Any given `timestamp` must not be older than `10s`
-* No more than 3 unsuccessful authentication attempts within 1 hour
-* No more than 1 invalid `hashcash`
+* Not more than 3 unsuccessful authentication attempts within 1 hour
+* Not more than 1 invalid `hashcash`
+* Not more than 1 invalid `JSON` body
 
 A ban will block **all traffic** from your ip for several hours.
 Be careful to not lock yourself out.
