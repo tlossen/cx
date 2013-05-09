@@ -1,0 +1,60 @@
+<html>
+<head>
+  <style>
+    body, table, tr, th, td {
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+    table {
+      border-spacing: 0;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      overflow
+    }
+    #main {
+      width: 100%;
+      height: 100%;
+    }
+    #header {
+      height: 40px;
+      padding: 10px;
+      color: white;
+      background-color: black;
+      font-family: Helvetica, Arial, sans-serif;
+    }
+    #trades {
+      width: 30%;
+      border-right: 1px solid black;
+    }
+    #trades iframe {
+      overflow-y: hidden;
+    }
+    #order_book {
+      width: 30%;
+      border-right: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <table id="main">
+    <tr>
+      <td id="header" colspan="3">
+        Nonstop CX
+      </td>
+    </tr>
+    <tr>
+      <td id="trades">
+        <iframe src="trades.html"></iframe>
+      </td>
+      <td id="order_book">
+        <iframe src="order_book.html"></iframe>
+      </td>
+      <td id="account">&nbsp;</td>
+    </tr>
+  </table>
+</body>
+</html>
