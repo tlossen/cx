@@ -18,7 +18,7 @@ end
 
 -- connect to redis
 local redis = require("redis"):new()
-local ok, err = r:connect("127.0.0.1", 6379)
+local ok, err = redis:connect("127.0.0.1", 6379)
 if not ok then
   ngx.exit(500)
 end
