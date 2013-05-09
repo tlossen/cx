@@ -35,3 +35,7 @@ export LUAJIT_INC=/usr/local/Cellar/luajit/2.0.1/include/luajit-2.0
 
 make -j2
 make install
+
+cd $root
+luarocks install sha2
+luarocks install lua-cjson
