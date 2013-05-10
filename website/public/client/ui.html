@@ -1,5 +1,7 @@
 <html>
 <head>
+  <title>Nonstop CX</title>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
   <style>
     body, table, tr, th, td {
       margin: 0;
@@ -26,15 +28,15 @@
       background-color: black;
       font-family: Helvetica, Arial, sans-serif;
     }
-    #trades {
-      width: 30%;
+    #account {
       border-right: 1px solid black;
     }
-    #trades iframe {
-      overflow-y: hidden;
-    }
     #order_book {
-      width: 30%;
+      width: 25%;
+      border-right: 1px solid black;
+    }
+    #trades {
+      width: 25%;
       border-right: 1px solid black;
     }
   </style>
@@ -50,10 +52,10 @@
       <td id="trades">
         <iframe src="trades.html"></iframe>
       </td>
+      <td id="account">&nbsp;</td>
       <td id="order_book">
         <iframe src="order_book.html"></iframe>
       </td>
-      <td id="account">&nbsp;</td>
     </tr>
   </table>
 </body>
