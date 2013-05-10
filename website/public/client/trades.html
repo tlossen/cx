@@ -1,25 +1,36 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link href='http://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
   <script>
+    function time() {
+      var date = new Date();
+      var hours = ("00" + date.getHours()).slice(-2);
+      var minutes = ("00" + date.getMinutes()).slice(-2);
+      var seconds = ("00" + date.getSeconds()).slice(-2);
+      return hours + ":" + minutes + ":" + seconds;
+    }
     function addTrade() {
-      var eur = (100 * Math.random()).toFixed(2);
+      var eur = (87.5 + Math.random()).toFixed(2);
       var btc = (10 * Math.random()).toFixed(2);
-      $("#trades").prepend("<tr><td>22:15:01</td><td>EUR " + eur + "</td><td>BTC " + btc + "</td></tr>");
-      if ($("#trades tr").length > 50) {
+      $("#trades").prepend("<tr><td>" + time() + "</td><td>" + eur + "</td><td>" + btc + "</td></tr>");
+      if ($("#trades tr").length > 100) {
         $("#trades tr:last-child").remove();
       }
     }
-    $(function() {
-      setInterval(addTrade, 350);
-    });
+    function ticker() {
+      addTrade();
+      setTimeout(ticker, 1500 * Math.random());
+    }
+    $(function() { ticker(); });
   </script>
   <style>
     body {
-      background-color: #ccc;
+      background-color: #ddd;
       overflow: hidden;
-      font-family: Helvetica, Arial, sans-serif;
+      font-family: "Droid Sans Mono", monospace;
+      color: #333;
     }
     table {
       width: 100%;
@@ -27,19 +38,26 @@
     td {
       vertical-align: top;
       text-align: right;
-    }
-    td:first-child {
-      text-align: left;
+      font-size: 20px;
     }
   </style>
 </head>
 <body>
-  <table id="trades">
-    <tr>
-      <td>22:15:01</td>
-      <td>EUR 86.23</td>
-      <td>BTC 4.00</td>
-    </tr>
+  <table>
+    <thead>
+      <tr>
+        <td>Time</td>
+        <td>EUR</td>
+        <td>BTC</td>
+      </tr>
+    </thead>
+    <tbody id="trades">
+      <tr>
+        <td>22:15:01</td>
+        <td>86.23</td>
+        <td>4.00</td>
+      </tr>
+    </tbody>
   </table>
 </body>
 </html>
