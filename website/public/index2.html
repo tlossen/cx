@@ -9,26 +9,36 @@
     });
   </script>
   <style>
-    body {
+    body, div {
       margin: 0;
       padding: 0;
-      background-color: black;
-      color: white;
+    }
+    body {
+      background-color: #ffc;
+      color: black;
       font-family: Helvetica, Arial, sans-serif;
     }
+    h1 {
+      margin-top: 40px;
+    }
     #bar {
+      background-color: black;
+      color: #fff;
+    }
+    #bar-inner {
       height: 36px;
-      margin: 12px 50px;
+      width: 800px;
+      margin: 0 auto;
+      padding: 10px;
       font-size: 30px;
     }
     #picture {
-      margin: 0;
       height: 600px;
     }
     #claim {
-      position: absolute;
-      left: 50px;
-      top: 50px;
+      width: 800px;
+      margin: 0 auto;
+      text-align: right;
     }
     #claim div {
       padding: 10px;
@@ -37,6 +47,16 @@
       font-size: 80px;
       margin-bottom: 30px;
       display: inline-block;
+    }
+    #main-inner {
+      width: 800px;
+      margin: 0 auto;
+      font-size: 110%;
+    }
+    #footer {
+      height: 200px;
+      margin-top: 80px;
+      background-color: black;
     }
     #credits {
       position: absolute;
@@ -54,7 +74,9 @@
 </head>
 <body>
   <div id="bar">
-    Nonstop CX
+    <div id="bar-inner">
+      Nonstop CX
+    </div>
   </div>
   <div id="picture">
     <div id="claim">
@@ -62,6 +84,19 @@
       <div>Bitcoin Exchange</div>
     </div>
   </div>
+  <div id="main">
+    <div id="main-inner">
+      <h1>Fast</h1>
+      <p>Having a unique Bitcoin currency sign will allow typographers to add their currency sign design in their fonts. This is similar as implementing support for the euro sign. Each font has its own version of the euro sign that fits with the style observed in the characters in the rest of the fonts of their typefaces. Note that the Unicode Consortium does not endorse Bitcoin in any way by assigning a Unicode character code, however, having a Unicode for the Bitcoin sign will also be good for PR and help having Bitcoin be taken more seriously.</p>
+      <h1>Always On</h1>
+      <p>Having a unique Bitcoin currency sign will allow typographers to add their currency sign design in their fonts. This is similar as implementing support for the euro sign. Each font has its own version of the euro sign that fits with the style observed in the characters in the rest of the fonts of their typefaces. Note that the Unicode Consortium does not endorse Bitcoin in any way by assigning a Unicode character code, however, having a Unicode for the Bitcoin sign will also be good for PR and help having Bitcoin be taken more seriously.</p>
+      <h1>Secure</h1>
+      <p>Having a unique Bitcoin currency sign will allow typographers to add their currency sign design in their fonts. This is similar as implementing support for the euro sign. Each font has its own version of the euro sign that fits with the style observed in the characters in the rest of the fonts of their typefaces. Note that the Unicode Consortium does not endorse Bitcoin in any way by assigning a Unicode character code, however, having a Unicode for the Bitcoin sign will also be good for PR and help having Bitcoin be taken more seriously.</p>
+    </div>
+  </div>
+  <div id="footer">
+  </div>
+    
   <!-- <div id="credits">
     <a href="http://www.flickr.com/photos/themonnie/2495892146/">flickr.com/photos/themonnie/2495892146</a>
   </div> -->
