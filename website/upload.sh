@@ -1,1 +1,1 @@
-s3cmd sync public/ s3://www.nonstop.cx
+s3cmd sync public/ s3://nonstop.cx
