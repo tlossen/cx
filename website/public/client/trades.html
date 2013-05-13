@@ -14,7 +14,7 @@
     function addTrade() {
       var eur = (87.5 + Math.random()).toFixed(2);
       var btc = (20 * Math.random()).toFixed(2);
-      $("#trades").prepend("<tr><td>" + time() + "</td><td>" + eur + "</td><td>" + btc + "</td></tr>");
+      $("#trades").prepend("<tr><td>" + time() + "</td><td>" + btc + "</td><td>" + eur + "</td></tr>");
       if ($("#trades tr").length > 100) {
         $("#trades tr:last-child").remove();
       }
@@ -36,9 +36,15 @@
       width: 100%;
     }
     td {
-      vertical-align: top;
+      vertical-align: baseline;
       text-align: right;
-      font-size: 20px;
+      font-size: 18px;
+    }
+    tr td:last-child {
+      font-weight: bold;
+    }
+    .btc {
+      font-size: 80%;
     }
   </style>
 </head>
@@ -47,15 +53,15 @@
     <thead>
       <tr>
         <td style="width: 34%">Time</td>
-        <td style="width: 33%">EUR</td>
-        <td style="width: 33%">฿ BTC</td>
+        <td style="width: 33%"><span class="btc">฿</span></td>
+        <td style="width: 33%">€</td>
       </tr>
     </thead>
     <tbody id="trades">
       <tr>
         <td>22:15:01</td>
-        <td>86.23</td>
         <td>4.00</td>
+        <td>86.23</td>
       </tr>
     </tbody>
   </table>
