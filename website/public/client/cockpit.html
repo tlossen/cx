@@ -1,12 +1,21 @@
 <html>
 <head>
-  <title>Nonstop CX</title>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+  <title>Cockpit</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+  <script>
+    function showTrades() {
+      $("#left-frame").attr("src", "trades.html");
+    }
+    function showRates() {
+      $("#left-frame").attr("src", "order_book.html");
+    }
+  </script>
   <style>
     body, table, tr, th, td {
       margin: 0;
       padding: 0;
       border: 0;
+      font-family: Helvetica, Arial, sans-serif;
     }
     table {
       border-spacing: 0;
@@ -29,15 +38,40 @@
       font-family: Helvetica, Arial, sans-serif;
       font-size: 24px;
     }
+    #footer {
+      height: 30px;
+      background-color: #666;
+    }
+    #footer td:last-child {
+      padding-right: 10px;
+      text-align: right;
+    }
     #account {
       border-left: 1px solid black;
       border-right: 1px solid black;
     }
-    #order_book {
-      width: 25%;
+    #left {
+      width: 300px;
     }
-    #trades {
-      width: 25%;
+    #right {
+      width: 310px;
+    }
+    #rates {
+      display: none;
+    }
+    a.pill {
+      margin-left: 10px;
+      padding: 0 10px;
+      background-color: black;
+      -moz-border-radius: 30px;
+      -webkit-border-radius: 30px;
+      border-radius: 30px;
+      text-decoration: none;
+      color: white;
+    }
+    a.pill:hover {
+      color: yellow;
+      background-color: #333;
     }
   </style>
 </head>
@@ -49,12 +83,23 @@
       </td>
     </tr>
     <tr>
-      <td id="trades">
-        <iframe src="trades.html"></iframe>
+      <td id="left">
+        <iframe id="left-frame" src="trades.html"></iframe>
       </td>
       <td id="account">&nbsp;</td>
-      <td id="order_book">
-        <iframe src="order_book.html"></iframe>
+      <td id="right">
+        <iframe id="right-frame" src="order_book.html"></iframe>
+      </td>
+    </tr>
+    <tr id="footer">
+      <td>
+        <a class="pill" onclick="showTrades()" href="#">trades</a>
+        <a class="pill" onclick="showRates()">rates</a>
+      </td>
+      <td></td>
+      <td>
+        <a class="pill" href="#">details</a>
+        <a class="pill" href="#">summary</a>
       </td>
     </tr>
   </table>
