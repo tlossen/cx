@@ -1,7 +1,7 @@
 <html>
 <head>
   <title>Nonstop CX</title>
-  <link href='http://fonts.googleapis.com/css?family=Exo|Droid+Serif' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Exo|Lora' rel='stylesheet' type='text/css'>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.3/jquery.backstretch.min.js"></script>
   <script>
@@ -13,7 +13,7 @@
     body, div {
       margin: 0;
       padding: 0;
-      font-family: "Droid Serif", serif;
+      font-family: "Lora", serif;
     }
     body {
       background-color: #fff;
@@ -43,7 +43,7 @@
       margin: 0 auto;
       text-align: right;
     }
-    #claim div {
+    #claim .text {
       padding: 2px 20px;
       background-color: rgba(0, 255, 255, 0.3);
       color: black;
@@ -59,19 +59,18 @@
       font-size: 110%;
     }
     #footer {
-      height: 200px;
+      height: 100px;
       margin-top: 80px;
       background-color: black;
     }
     #credits {
       position: absolute;
-      bottom: 0;
-      right: 0;
-      margin: 5px 20px;
+      bottom: 5;
+      right: 5;
     }
     #credits a {
       font-family: monospace;
-      font-size: 10px;
+      font-size: 9px;
       text-decoration: none;
       color: #999;
     }
@@ -85,25 +84,39 @@
   </div>
   <div id="picture">
     <div id="claim">
-      <div>The <b>Ultimate</b></div><br>
-      <div>Bitcoin Exchange</div>
+      <div class="text">The <b>Ultimate</b></div><br>
+      <div class="text">Bitcoin Exchange</div>
+      <div id="credits">
+        <a href="http://www.flickr.com/photos/eole/8710744352/">flickr.com/photos/eole/8710744352</a>
+      </div>
     </div>
   </div>
   <div id="main">
     <div id="main-inner">
       <h1>Fast</h1>
-      <p>Having a unique Bitcoin currency sign will allow typographers to add their currency sign design in their fonts. This is similar as implementing support for the euro sign. Each font has its own version of the euro sign that fits with the style observed in the characters in the rest of the fonts of their typefaces. Note that the Unicode Consortium does not endorse Bitcoin in any way by assigning a Unicode character code, however, having a Unicode for the Bitcoin sign will also be good for PR and help having Bitcoin be taken more seriously.</p>
-      <h1>Always On</h1>
-      <p>Having a unique Bitcoin currency sign will allow typographers to add their currency sign design in their fonts. This is similar as implementing support for the euro sign. Each font has its own version of the euro sign that fits with the style observed in the characters in the rest of the fonts of their typefaces. Note that the Unicode Consortium does not endorse Bitcoin in any way by assigning a Unicode character code, however, having a Unicode for the Bitcoin sign will also be good for PR and help having Bitcoin be taken more seriously.</p>
+      <p>
+        Our proprietary "Cheetah" trading engine can execute hundreds of trades per second with sub-second order lag.
+        This means you can always trade, even when the market is turbulent.
+        Watch <a href="http://www.theatlantic.com/video/index/265674/ultra-slo-mo-cheetahs/">this video</a> to see it in action ;)
+      </p>
+
       <h1>Secure</h1>
-      <p>Having a unique Bitcoin currency sign will allow typographers to add their currency sign design in their fonts. This is similar as implementing support for the euro sign. Each font has its own version of the euro sign that fits with the style observed in the characters in the rest of the fonts of their typefaces. Note that the Unicode Consortium does not endorse Bitcoin in any way by assigning a Unicode character code, however, having a Unicode for the Bitcoin sign will also be good for PR and help having Bitcoin be taken more seriously.</p>
+      <p>
+        We keep both your money and your bitcoins in safe escrow accounts.
+        All traffic is sent over SSL, secured with an industrial-strength 2048 bit certificate.
+        This means nobody can intercept your orders, or manipulate your account.
+      </p>
+
+      <h1>Always On</h1>
+      <p>
+        Our distributed architecture was built from the ground up to be as robust and resilient as possible,
+        with gateways in multiple data centers around the world.
+        This means our platform is hard to bring down by DDOS (distributed denial of service) attacks.
+      </p>
     </div>
   </div>
   <div id="footer">
   </div>
-    
-  <!-- <div id="credits">
-    <a href="http://www.flickr.com/photos/themonnie/2495892146/">flickr.com/photos/themonnie/2495892146</a>
-  </div> -->
+
 </body>
 </html>
