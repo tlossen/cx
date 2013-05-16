@@ -2,13 +2,11 @@
 <head>
   <title>Cockpit</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-backstretch/2.0.3/jquery.backstretch.min.js"></script>
   <script>
-    function showTrades() {
-      $("#left-frame").attr("src", "trades.html");
-    }
-    function showRates() {
-      $("#left-frame").attr("src", "order_book.html");
-    }
+    $(function() {
+      $("#chart").backstretch("chart.png");
+    });
   </script>
   <style>
     body, table, tr, th, td {
@@ -37,6 +35,10 @@
       background-color: black;
       font-family: Helvetica, Arial, sans-serif;
       font-size: 24px;
+    }
+    #chart {
+      height: 300px;
+      border-bottom: 1px solid black;
     }
     #footer {
       height: 30px;
@@ -83,23 +85,15 @@
       </td>
     </tr>
     <tr>
+      <td id="chart" colspan="3"></td>
+    </tr>
+    <tr>
       <td id="left">
         <iframe id="left-frame" src="trades.html"></iframe>
       </td>
-      <td id="account">&nbsp;</td>
+      <td id="account"></td>
       <td id="right">
         <iframe id="right-frame" src="order_book.html"></iframe>
-      </td>
-    </tr>
-    <tr id="footer">
-      <td>
-        <a class="pill" onclick="showTrades()" href="#">trades</a>
-        <a class="pill" onclick="showRates()">rates</a>
-      </td>
-      <td></td>
-      <td>
-        <a class="pill" href="#">details</a>
-        <a class="pill" href="#">summary</a>
       </td>
     </tr>
   </table>
