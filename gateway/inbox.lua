@@ -12,7 +12,7 @@ local auth_token = ngx.var.http_x_auth or ""
 local nons = ngx.var.http_x_nons or ngx.exit(400)
 local cash = ngx.var.http_x_cash or ngx.exit(400)
 local hash = ngx.var.remote_addr .. timestamp .. auth_token .. request_body_hash .. nons
-if not sha2.sha256hex(hash) == cash then
+if sha2.sha256hex(hash) ~= cash then
   ngx.exit(400)
 end
 
