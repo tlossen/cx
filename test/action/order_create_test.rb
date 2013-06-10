@@ -16,12 +16,12 @@ describe OrderCreate do
       @bid = OrderCreate.new(type: "bid", account_id: 42, eur_limit: 9800, btc: 500)
     end
 
-    it "ensure the account has sufficient unused EUR balance" do
+    it "should ensure the account has sufficient unused EUR balance" do
       $db.update(:accounts, "set eur_used = eur where account_id = 42")
       assert_raises(RuntimeError) { @bid.execute }
     end
 
-    it "should increase account.eur_used by total order amount" do
+    it "should increase eur_used by total order amount" do
       @bid.execute
       result = $db.exec("select eur_used from accounts where account_id = 42").first
       assert_equal 300 + 9800 * 5, result["eur_used"]
@@ -56,12 +56,12 @@ describe OrderCreate do
       @ask = OrderCreate.new(type: "ask", account_id: 42, eur_limit: 9800, btc: 500)
     end
 
-    it "ensure the account has sufficient unused BTC balance" do
+    it "should ensure the account has sufficient unused BTC balance" do
       $db.update(:accounts, "set btc_used = btc where account_id = 42")
       assert_raises(RuntimeError) { @ask.execute }
     end
 
-    it "should increase account.btc_used by btc amount" do
+    it "should increase btc_used by btc amount" do
       @ask.execute
       result = $db.exec("select btc_used from accounts where account_id = 42").first
       assert_equal 300 + 500, result["btc_used"]

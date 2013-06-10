@@ -15,14 +15,21 @@ class OrderCancel < Action
   LUA
 
   def execute
+    raise("no active order: order_id #{order_id}") unless exists?
     order = unpack($redis.eval(DELETE_ORDER, [], [order_id]))
-    if order
-      btc_open = order["btc_open"]
-      $db.transaction do
-        $db.update(:orders, "set active = false where order_id = #{order_id}")
-        $db.update(:accounts, "set btc_used = btc_used - #{btc_open} where account_id = #{account_id}")
-      end
+    raise("not in order book: order_id #{order_id}") unless order
+    btc_open = order["btc_open"]
+    $db.transaction do
+      $db.update(:orders, "set active = false where order_id = #{order_id}")
+      $db.update(:accounts, "set btc_used = btc_used - #{btc_open} where account_id = #{account_id}")
     end
+  end
+
+private
+
+  def exists?
+    Boolean($db.exec("select order_id from orders where order_id = #{order_id}
+      and account_id = #{account_id} and active = true").first)
   end
 
 end
